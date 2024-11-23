@@ -26,13 +26,9 @@ void	*ft_memmove(void *dst, const void *src, size_t len)
 	lastd = d + len - 1;
 	lasts = s + len - 1;
 	if (!dst && !src)
-	{
 		return (NULL);
-	}
 	if (dst == src)
-	{
 		return (dst);
-	}
 	if (d < s)
 	{
 		while (i < len)
