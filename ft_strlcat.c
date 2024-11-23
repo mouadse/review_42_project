@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strlcat.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hsennane <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: msennane <msennane@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 22:42:05 by hsennane          #+#    #+#             */
-/*   Updated: 2024/11/18 22:59:34 by hsennane         ###   ########.fr       */
+/*   Updated: 2024/11/23 21:34:29 by msennane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,19 +15,17 @@
 size_t	ft_strlcat(char *dst, const char *src, size_t dstsize)
 {
 	size_t	dst_len;
-	size_t	src_len;
 	size_t	i;
 
 	i = 0;
-	src_len = ft_strlen(src);
 	dst_len = ft_strlen(dst);
 	if (!dstsize)
 	{
-		return (src_len);
+		return (ft_strlen(src));
 	}
 	if (dstsize <= dst_len)
 	{
-		return (dstsize + src_len);
+		return (dstsize + ft_strlen(src));
 	}
 	while (src[i] && (dst_len + i) < dstsize - 1)
 	{
@@ -35,5 +33,5 @@ size_t	ft_strlcat(char *dst, const char *src, size_t dstsize)
 		i++;
 	}
 	dst[dst_len + i] = '\0';
-	return (dst_len + src_len);
+	return (dst_len + ft_strlen(src));
 }
