@@ -5,125 +5,92 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: hsennane <hsennane@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/22 13:08:58 by hsennane          #+#    #+#             */
-/*   Updated: 2024/11/23 22:03:46 by hsennane         ###   ########.fr       */
+/*   Created: 2024/11/23 22:55:49 by hsennane          #+#    #+#             */
+/*   Updated: 2024/11/23 22:55:51 by hsennane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static int	nbr_of_words(const char *s, char c)
+static int	count_words(char const *s, char sep)
 {
-	int	n;
-	int	i;
+	int	count;
+	int	in_word;
 
-	i = 0;
-	n = 0;
-	while (s[i])
+	count = 0;
+	in_word = 0;
+	while (*s)
 	{
-		while (s[i] == c)
-			i++;
-		if (s[i] && s[i] != c)
-			n++;
-		while (s[i] && s[i] != c)
-			i++;
-	}
-	return (n);
-}
-
-static int	*get_word_len(const char *s, char c)
-{
-	int	i;
-	int	j;
-	int	*word_len;
-	int	nbr_words;
-	int	len;
-
-	i = 0;
-	j = 0;
-	nbr_words = nbr_of_words(s, c);
-	word_len = (int *)malloc(sizeof(int) * nbr_words);
-	if (!word_len)
-		return (NULL);
-	while (s[i] && j < nbr_words)
-	{
-		len = 0;
-		while (s[i] == c)
-			i++;
-		while (s[i] && s[i] != c)
+		if (*s == sep)
+			in_word = 0;
+		else if (!in_word)
 		{
-			len++;
-			i++;
+			in_word = 1;
+			count++;
 		}
-		word_len[j++] = len;
+		s++;
 	}
-	return (word_len);
+	return (count);
 }
 
-static void	free_array(char **t, int n)
+static char	*get_next_word(char const **s, char sep)
+{
+	char	*word;
+	int		len;
+	int		i;
+
+	len = 0;
+	while (**s && **s == sep)
+		(*s)++;
+	while ((*s)[len] && !((*s)[len] == sep))
+		len++;
+	word = malloc(sizeof(char) * (len + 1));
+	if (!word)
+		return (NULL);
+	i = 0;
+	while (i < len)
+	{
+		word[i] = (*s)[i];
+		i++;
+	}
+	word[i] = '\0';
+	*s += len;
+	return (word);
+}
+
+static void	free_split(char **split, int count)
 {
 	int	i;
 
 	i = 0;
-	while (i < n)
+	while (i < count)
 	{
-		free(t[i]);
+		free(split[i]);
 		i++;
 	}
-	free(t);
+	free(split);
 }
 
-static char	**allocate_array(const char *s, char c)
+char	**ft_split(char const *s, char sep)
 {
-	int		nbr_words;
-	int		*len;
-	char	**t;
+	char	**result;
+	int		word_count;
 	int		i;
-
-	i = 0;
-	nbr_words = nbr_of_words(s, c);
-	len = get_word_len(s, c);
-	if (!len)
-		return (NULL);
-	t = (char **)malloc(sizeof(char *) * (nbr_words + 1));
-	if (!t)
-		return (free(len), NULL);
-	while (i < nbr_words)
-	{
-		t[i] = (char *)malloc(sizeof(char) * (len[i] + 1));
-		if (!t[i])
-			return (free_array(t, i), free(len), NULL);
-		i++;
-	}
-	t[nbr_words] = NULL;
-	free(len);
-	return (t);
-}
-
-char	**ft_split(const char *s, char c)
-{
-	char	**t;
-	int		i;
-	int		j;
-	int		k;
-	int		count;
 
 	if (!s)
 		return (NULL);
-	j = 0;
-	i = 0;
-	count = nbr_of_words(s, c);
-	t = allocate_array(s, c);
-	if (!t)
+	word_count = count_words(s, sep);
+	result = malloc(sizeof(char *) * (word_count + 1));
+	if (!result)
 		return (NULL);
-	while (s[i] && j < count)
+	i = 0;
+	while (i < word_count)
 	{
-		while (s[i] == c)
-			i++;
-		k = 0;
-		while (s[i] && s[i] != c)
-			t[j][k++] = s[i++];
-		t[j++][k] = '\0';
+		result[i] = get_next_word(&s, sep);
+		if (!result[i])
+			return (free_split(result, i),NULL);
+		i++;
 	}
-	return (t);
+	result[i] = NULL;
+	return (result);
 }
