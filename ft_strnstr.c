@@ -18,16 +18,12 @@ char	*ft_strnstr(const char *haystack, const char *needle, size_t len)
 	size_t	j;
 
 	i = 0;
-	if (!haystack || !needle)
+	if (!haystack && !needle)
 		return (NULL);
 	if (needle[i] == '\0')
-	{
 		return ((char *)haystack);
-	}
 	if (!haystack && needle && !len)
-	{
 		return (NULL);
-	}
 	while (haystack[i] && i < len)
 	{
 		j = 0;
