@@ -6,7 +6,7 @@
 /*   By: hsennane <hsennane@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 13:08:58 by hsennane          #+#    #+#             */
-/*   Updated: 2024/11/22 13:09:02 by hsennane         ###   ########.fr       */
+/*   Updated: 2024/11/23 22:03:46 by hsennane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,7 @@ static int	*get_word_len(const char *s, char c)
 			len++;
 			i++;
 		}
-		word_len[j] = len;
-		j++;
+		word_len[j++] = len;
 	}
 	return (word_len);
 }
@@ -88,19 +87,12 @@ static char	**allocate_array(const char *s, char c)
 		return (NULL);
 	t = (char **)malloc(sizeof(char *) * (nbr_words + 1));
 	if (!t)
-	{
-		free(len);
-		return (NULL);
-	}
+		return (free(len), NULL);
 	while (i < nbr_words)
 	{
 		t[i] = (char *)malloc(sizeof(char) * (len[i] + 1));
 		if (!t[i])
-		{
-			free_array(t, i);
-			free(len);
-			return (NULL);
-		}
+			return (free_array(t, i), free(len), NULL);
 		i++;
 	}
 	t[nbr_words] = NULL;
