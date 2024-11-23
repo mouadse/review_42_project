@@ -11,7 +11,7 @@ OFILES = $(CFILES:.c=.o)
 CFLAGS = -Wall -Wextra -Werror
 CC = cc
 RM = rm -f
-AR = ar rc
+AR = ar rcs
 
 all: $(NAME)
 
