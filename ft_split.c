@@ -88,7 +88,7 @@ char	**ft_split(char const *s, char sep)
 	{
 		result[i] = get_next_word(&s, sep);
 		if (!result[i])
-			return (free_split(result, i),NULL);
+			return (free_split(result, i), NULL);
 		i++;
 	}
 	result[i] = NULL;
